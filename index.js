@@ -30,7 +30,10 @@ const xlsx = require("xlsx");
                 const priceFraction = product.querySelector('.a-price-fraction')?.innerText;
 
                 if (!priceWhole || !priceFraction) {
-                    return
+                    return {
+                        title,
+                        price: "N/A",
+                    }
                 }
 
                 const priceWholeCleaned = priceWhole.replace(/\n/g, "").trim();
@@ -38,7 +41,7 @@ const xlsx = require("xlsx");
 
                 return {
                     title,
-                    price: `${priceWhole}.${priceFraction}`
+                    price: `${priceWhole}${priceFraction}`
                 }
 
             });
@@ -66,5 +69,16 @@ const xlsx = require("xlsx");
     }
 
     console.log(products);
+
+    const wb = xlsx.utils.book_new();
+    const ws = xlsx.utils.json_to_sheet(products);
+    const path = "products.xlsx";
+
+    xlsx.utils.book_append_sheet(wb, ws, "Products");
+    xlsx.writeFile(wb, path);
+
+    await browser.close();
+
+
 
 })();
