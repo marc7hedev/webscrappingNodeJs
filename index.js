@@ -3,15 +3,28 @@ const xlsx = require("xlsx");
 
 (async () => {
 
-    // const URL = "https://www.amazon.com/s?k=programming+socks&crid=2N7PNBPAGV4RV&sprefix=progrramming+s%2Caps%2C271&ref=nb_sb_ss_sc_1_13";
-    const URL = "https://www.amazon.com/";
+    const URL = "https://www.amazon.com/s?k=programming+socks&crid=2N7PNBPAGV4RV&sprefix=progrramming+s%2Caps%2C271&ref=nb_sb_ss_sc_1_13";
+    // const URL = "https://www.amazon.com/";
+
+    const proxyURL = "";
+    const username = "";
+    const password = "";
 
     const browser = await puppeteer.launch({
-        headless: false
+        headless: false,
+        args: [
+            `--proxy-server=${proxyURL}`
+        ]
     });
 
+    
     const page = await browser.newPage();
-
+    
+    await page.authenticate({
+        username,
+        password
+    });
+    
     await page.goto(URL, {waitUntil: 'networkidle2'});
 
     const title = await page.title();
